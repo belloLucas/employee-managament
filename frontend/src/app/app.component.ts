@@ -56,6 +56,7 @@ export class AppComponent {
   
   message: string = '';
   messageType: string = '';
+  isLoading: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -66,6 +67,12 @@ export class AppComponent {
 
   async submitUser(event: Event) {
     event.preventDefault();
+
+    if (this.isLoading) {
+      return
+    }
+
+    this.isLoading = true;
     
     try {
       const response = await this.http.post('http://localhost:8080/api/register', this.user).toPromise();
@@ -87,11 +94,19 @@ export class AppComponent {
       this.messageType = 'error-message';
       setTimeout(() => this.clearMessage(), 5000);
       console.error('Erro no registro:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
   
   async submitLogin(event: Event) {
     event.preventDefault();
+
+    if (this.isLoading) {
+      return
+    }
+
+    this.isLoading = true;
     
     try {
       const response = await this.http.post('http://localhost:8080/api/login', this.loginData).toPromise();
@@ -106,6 +121,8 @@ export class AppComponent {
       this.messageType = 'error-message';
       setTimeout(() => this.clearMessage(), 5000);
       console.error('Erro no login:', error);
+    } finally {
+      this.isLoading = false;
     }
   }
 }
