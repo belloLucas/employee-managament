@@ -8,8 +8,8 @@ COPY package*.json ./
 
 RUN npm install
 
-COPY . .
+# COPY . .
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--disable-host-check", "--poll=2000"]
