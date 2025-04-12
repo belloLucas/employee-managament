@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService, LoginData } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
 
@@ -21,10 +22,11 @@ export class LoginFormComponent {
   
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private router: Router
   ) {}
   
-  async submitLogin(event: Event) {
+  submitLogin(event: Event) {
     event.preventDefault();
     
     if (this.isLoading) {
@@ -36,7 +38,10 @@ export class LoginFormComponent {
     this.authService.login(this.loginData).subscribe({
       next: (response) => {
         this.notificationService.showSuccess('Login realizado com sucesso!');
-        //TODO: Redirecionar o usuário ou salvar o token
+        
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
       },
       error: (error) => {
         this.notificationService.showError(error.error?.message || 'Credenciais inválidas.');
