@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { UserService, AuthResponse } from './user.service';
 
 export interface UserRegistration {
   name: string;
@@ -20,13 +21,29 @@ export interface LoginData {
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private userService: UserService
+  ) {}
 
-  login(loginData: LoginData): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, loginData);
+  login(loginData: LoginData): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, loginData)
+      .pipe(
+        tap(response => this.userService.setAuthData(response))
+      );
   }
 
-  register(userData: UserRegistration): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, userData);
+  register(userData: UserRegistration): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/register`, userData)
+      .pipe(
+        tap(response => this.userService.setAuthData(response))
+      );
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/logout`, {})
+      .pipe(
+        tap(() => this.userService.clearAuthData())
+      );
   }
 }
