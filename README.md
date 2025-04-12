@@ -41,27 +41,27 @@ employee-management/
 
 1. Clone o repositório
     ```bash
-        git clone https://github.com/seu-usuario/employee-management.git
-        cd employee-management
+    git clone https://github.com/seu-usuario/employee-management.git
+    cd employee-management
     ```
 
 2. Inicie os containers Docker:
     ```bash
-        docker-compose up -d
+    docker-compose up -d
     ```
 
 3. Acesse o container da API para executar os comandos do Laravel:
     ```bash
-        docker-compose exec api bash
+    docker-compose exec api bash
     ```
 
 4. Dentro do container, instale as dependencias e configure o projeto:
     ```bash
-        composer install
-        cp .env.example .env
-        php artisan key:generate
-        php artisan migrate
-        php artisan db:seed
+    composer install
+    cp .env.example .env
+    php artisan key:generate
+    php artisan migrate
+    php artisan db:seed
     ```
     O arquivo .env.example já está completamente configurado para funcionar com o projeto em Docker.
 
@@ -74,51 +74,51 @@ employee-management/
 #### Backend
 1. Navegue até a pasta da API:
     ```bash
-        cd api
+    cd api
     ```
 
 2. Instale as dependências:
     ```bash
-        composer install
+    composer install
     ```
 
 3. Configure o arquivo `.env`:
     ```bash
-        cp .env.example .env
-        php artisan key:generate
+    cp .env.example .env
+    php artisan key:generate
     ```
 
 4. Configure o Banco de dados no arquivo `.env`
 
 5. Execute as migrations:
     ```bash
-        php artisan migrate
+    php artisan migrate
     ```
 
 6. (Opcional) Execute os seeds para popular o banco de dados com dados de exemplo:
     ```bash
-        php artisan db:seed
+    php artisan db:seed
     ```
 
 7. Inicie o servidor:
     ```bash
-        php artisan serve --port=8080
+    php artisan serve --port=8080
     ```
 
 #### Frontend
 1. Navegue até a pasta do frontend:
     ```bash
-        cd frontend
+    cd frontend
     ```
 
 2. Instale as dependências:
     ```bash
-        npm install
+    npm install
     ```
 
 3. Inicie o servidor frontend:
     ```bash
-        npm start
+    npm start
     ```
 
 ### Fluxos Principais
