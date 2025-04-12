@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService, UserRegistration } from '../services/auth.service';
 import { NotificationService } from '../services/notification.service';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-register-form',
@@ -23,10 +25,12 @@ export class RegisterFormComponent {
   
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private userService: UserService,
+    private router: Router
   ) {}
   
-  async submitRegister(event: Event) {
+  submitRegister(event: Event) {
     event.preventDefault();
     
     if (this.isLoading) {
@@ -38,12 +42,10 @@ export class RegisterFormComponent {
     this.authService.register(this.user).subscribe({
       next: (response) => {
         this.notificationService.showSuccess('Usuário registrado com sucesso!');
-        this.user = {
-          name: '',
-          email: '',
-          password: '',
-          password_confirmation: ''
-        };
+        
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
       },
       error: (error) => {
         this.notificationService.showError(error.error?.message || 'Erro ao registrar usuário.');
