@@ -25,11 +25,10 @@ employee-management/
 │   └── database/          # Migrações e seeds
 └── frontend/              # Frontend Angular
     └── src/
-        ├── app/
-        │   ├── components/
+        ├── app/ # Componentes, Models, Services
+        │   ├── componentes/
         │   ├── models/    # Interfaces TypeScript
         │   └── services/  # Serviços Angular
-        └── assets/        # Recursos estáticos
 ```
 
 ### Requisitos
