@@ -7,6 +7,45 @@
     Nenhum funcionário cadastrado ainda. Clique em "Adicionar Funcionário" para começar.
   </div>
 
+  <!-- Filter section -->
+  <div *ngIf="!isLoading && employees.length > 0" class="px-4 py-4 border-b border-gray-200">
+    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+      <div class="flex-1">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <input 
+            type="text" 
+            placeholder="Buscar funcionários..." 
+            (input)="onSearch($event)"
+            class="pl-10 py-2 block w-full border border-gray-300 rounded-md text-sm focus:border-indigo-700 outline-none">
+        </div>
+      </div>
+      
+      <div class="flex-shrink-0 w-full sm:w-56">
+        <select 
+          (change)="filterByDepartment($event)" 
+          class="block w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm focus:border-indigo-700 outline-none">
+          <option value="">Todos departamentos</option>
+          <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+        </select>
+      </div>
+      
+      <div class="flex-shrink-0 w-full sm:w-44">
+        <select 
+          (change)="filterByStatus($event)" 
+          class="block w-full border border-gray-300 rounded-md py-2 pl-3 pr-10 text-sm focus:border-indigo-700 outline-none">
+          <option value="">Todos status</option>
+          <option value="active">Ativos</option>
+          <option value="inactive">Inativos</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <div *ngIf="!isLoading && employees.length > 0" class="overflow-x-auto">
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
@@ -32,7 +71,7 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <tr *ngFor="let employee of employees" class="hover:bg-gray-50 cursor-pointer" (click)="onViewEmployee(employee)">
+        <tr *ngFor="let employee of filteredEmployees" class="hover:bg-gray-50 cursor-pointer" (click)="onViewEmployee(employee)">
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="flex items-center">
               <div class="flex-shrink-0 h-10 w-10">
