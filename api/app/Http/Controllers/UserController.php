@@ -4,22 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Http\Services\UserService;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $userService;
+
+    public function __construct(UserService $userService)
     {
-        return response()->json(['users' => User::all()]);
+        $this->userService = $userService;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index()
+    {
+        $users = $this->userService->getAllUsers();
+        return response()->json(['users' => $users]);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -29,28 +31,20 @@ class UserController extends Controller
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('users')->ignore($request->user()->id),
+                Rule::unique('users'),
             ],
             'password' => 'required|string|min:8',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
-        $user = User::create($validated);
-
+        $user = $this->userService->createUser($validated);
         return response()->json(['user' => $user], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(User $user)
     {
         return response()->json(['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -66,22 +60,13 @@ class UserController extends Controller
             'password' => 'sometimes|string|min:8',
         ]);
 
-        if (isset($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-
-        return response()->json(['user' => $user]);
+        $updatedUser = $this->userService->updateUser($user, $validated);
+        return response()->json(['user' => $updatedUser]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
-        $user->delete();
-
+        $this->userService->deleteUser($user);
         return response()->json(['message' => 'Usuário apagado com sucesso.']);
     }
 }
